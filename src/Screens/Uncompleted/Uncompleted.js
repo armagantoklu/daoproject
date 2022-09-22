@@ -1,27 +1,26 @@
 import React, {useState} from 'react';
 import {View, Text, FlatList, TouchableOpacity} from 'react-native';
 import styles from './Uncompleted.Styles';
-import machine from './../ToDoMachine';
+import machine from './../../ToDoMachine';
 import {useMachine} from '@xstate/react';
 import Button from './../../Components/Button';
 import Input from '../../Components/Input';
-const Uncompleted = () => {
+const Uncompleted = ({navigation}) => {
   const [taskName, setTaskName] = useState('');
   const [state, send] = useMachine(machine);
-  const {uncompletedList, completedList} = state.context;
+  const {uncompletedList} = state.context;
   const renderItem1 = ({item}) => (
     <TouchableOpacity
       onPress={() => {
         send('CompleteTask', {todo: item});
-        console.log(completedList);
       }}
-      style={{margin: 5, padding: 5, borderWidth: 1, borderRadius: 10}}>
-      <Text style={{fontSize: 18}}>{item}</Text>
+      style={styles.itemContainer}>
+      <Text style={styles.itemText}>{item}</Text>
     </TouchableOpacity>
   );
   return (
     <View style={styles.container}>
-      <Text>Tamamlanmamış Görevler</Text>
+      <Text style={styles.header}>Yapılacaklar</Text>
       <FlatList
         data={uncompletedList}
         renderItem={renderItem1}
@@ -40,6 +39,12 @@ const Uncompleted = () => {
             send('AddTask', {todo: taskName});
             setTaskName('');
           }
+        }}
+      />
+      <Button
+        title={'Tamamlanmış Görevlerim'}
+        onPress={() => {
+          navigation.navigate('CompletedScreen');
         }}
       />
     </View>

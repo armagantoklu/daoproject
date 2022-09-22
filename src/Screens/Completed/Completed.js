@@ -1,27 +1,34 @@
-import React from 'react';
-import {View, Text, FlatList} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, FlatList, TouchableOpacity} from 'react-native';
 import styles from './Completed.Styles';
 import {useMachine} from '@xstate/react';
-import machine from './../ToDoMachine';
+import machine from './../../ToDoMachine';
 import Button from '../../Components/Button';
 
-const Completed = () => {
+const Completed = ({navigation}) => {
   const [state, send] = useMachine(machine);
   const {completedList} = state.context;
-  const renderItem2 = ({item}) => <Text>{item}</Text>;
+  const renderItem1 = ({item}) => (
+    <TouchableOpacity
+      style={styles.itemContainer}
+      onPress={() => {
+        send('RecompleteTask', {todo: item});
+      }}>
+      <Text style={styles.itemText}>{item}</Text>
+    </TouchableOpacity>
+  );
   return (
     <View style={styles.container}>
-      <Text>Tamamlanmış Görevler</Text>
+      <Text style={styles.header}>Tamamlanan Görevler</Text>
       <FlatList
         data={completedList}
-        renderItem={renderItem2}
+        renderItem={renderItem1}
         keyExtractor={(_, index) => index.toString()}
       />
       <Button
-        title={'Tamamlanmış Görevleri Göster'}
+        title={'Tamamlanmamış Görevlerim'}
         onPress={() => {
-          const list = send('GetAllList');
-          console.log(list.context.completedList);
+          navigation.navigate('UncompletedScreen');
         }}
       />
     </View>

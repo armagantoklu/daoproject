@@ -1,17 +1,18 @@
 import React from 'react';
-import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Completed from './Screens/Completed';
 import Uncompleted from './Screens/Uncompleted';
+
 const App = () => {
-  const Tab = createBottomTabNavigator();
+  const Stack = createNativeStackNavigator();
+
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen component={Uncompleted} name="UncompletedScreen" />
-        <Tab.Screen component={Completed} name="CompletedScreen" />
-      </Tab.Navigator>
+      <Stack.Navigator screenOptions={{headerShown:false}}>
+        <Stack.Screen component={Uncompleted} name="UncompletedScreen" />
+        <Stack.Screen component={Completed} name="CompletedScreen" />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

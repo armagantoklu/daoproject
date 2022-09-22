@@ -7,17 +7,6 @@ export default machine = createMachine({
     uncompletedList: [],
   },
   states: {
-    Completed: {
-      on: {
-        GetAllList: {
-          actions: assign({
-            completedList: () => {
-              return [...completedList];
-            },
-          }),
-        },
-      },
-    },
     Uncompleted: {
       on: {
         AddTask: {
@@ -34,6 +23,15 @@ export default machine = createMachine({
               const taskId = context.uncompletedList.indexOf(event.todo);
               context.uncompletedList.splice(taskId, 1);
               return [...context.uncompletedList];
+            },
+          }),
+        },
+        RecompleteTask: {
+          actions: assign({
+            completedList: (context, event) => {
+              const taskId = context.completedList.indexOf(event.todo);
+              context.completedList.splice(taskId, 1);
+              return [...context.completedList];
             },
           }),
         },
